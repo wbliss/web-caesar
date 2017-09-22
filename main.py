@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, redirect
 from caesar import rotate_string
 
 app = Flask(__name__)
@@ -38,7 +38,10 @@ form = """
 """
 @app.route('/', methods=['POST'])
 def encrypt():
-    rot = int(request.form['rot'])
+    try:
+        rot = int(request.form['rot'])
+    except ValueError:
+        return redirect('/')
     text = request.form['text']
     new_text = rotate_string(text, rot)
     return form.format(new_text)
